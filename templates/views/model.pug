@@ -1,0 +1,51 @@
+extends ../layouts/base
+
+block content
+  .container.content
+    h1.title Your Profile
+
+    .columns
+      .column
+        if(model.Headshot)
+          figure.image.is-square
+            img(src=`${model.Headshot[0].url}`)
+      .column
+        h1.title= model['Full Name']
+        p= model['Email Address']
+        p= model['Primary Contact']
+
+        p=`${model['Age']}, ${model.Gender}, ${model.Ethnicity}`
+
+        .tags.has-addons
+          each skill in model.Skills
+            span.tag.is-danger=skill
+            a.tag.is-delete
+
+
+    - var headshots = model.Headshot
+    - var bodyshots = model['Full Body Shot']
+
+    if(headshots)
+      .columns
+        each headshot in headshots
+          .column
+            .card
+              .card-image
+                figure.image.is-square
+                  img(src=`${headshot.url}`)
+              .card-footer
+                a.card-footer-item Change Photo
+                a.card-footer-item Delete Photo
+
+
+    if(bodyshots)
+      .columns
+        each bodyshot in bodyshots
+          .column
+            .card
+              .card-image
+                figure.image.is-square
+                  img(src=`${bodyshot.url}`)
+              .card-footer
+                a.card-footer-item Change Photo
+                a.card-footer-item Delete Photo
