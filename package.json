@@ -11,12 +11,14 @@
   "dependencies": {
     "airtable": "^0.5.7",
     "bulma": "^0.7.2",
+    "cloudinary": "^1.13.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^6.1.0",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
+    "multer": "^1.4.1",
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
