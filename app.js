@@ -1,12 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var routes = require('./routes/index'); //All our routes
+const routes = require('./routes/index'); //All our routes
+const helpers = require('./helpers');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'templates/views')); //Path to templates
@@ -17,6 +18,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// pass variables to our templates + all requests
+app.use((req, res, next) => {
+  res.locals.h = helpers;
+  res.locals.currentPath = req.path;
+  next();
+});
 
 app.use('/', routes); // Tell the app where our routes are as defined above
 
