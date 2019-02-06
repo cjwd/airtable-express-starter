@@ -1,5 +1,13 @@
 extends ../layouts/base
+include ../mixins/_pagination
 
 block content
   h1.title= title
+
+  .users
+    each user in users
+      .user
+        p= `${user.name}`
+
+  +pagination(page, users[0].pages, count)
 
