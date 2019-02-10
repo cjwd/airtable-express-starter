@@ -9,16 +9,18 @@ const base = new Airtable({
  * THE FOLLWING IS JUST AN EXAMPLE
  */
 const TABLE = base('users'),
-      VIEW = 'Grid view',
-      LIMIT = 24;
+      OPTIONS = {
+        view: 'Grid View',
+        pageSize: 24
+      }
 
 const getUsers = async (page) => {
   records = [];
-  const users = await data.getAirtableRecords(TABLE, VIEW, LIMIT);
+  const users = await data.getAirtableRecords(TABLE, OPTIONS);
 
   const COUNT = users.length,
-        PAGES = Math.ceil(COUNT / LIMIT),
-        OFFSET = (page * LIMIT) - LIMIT;
+        PAGES = Math.ceil(COUNT / OPTIONS.pageSize),
+        OFFSET = (page * OPTIONS.pageSize) - OPTIONS.pageSize;
 
   return users.map( user => {
     return {
@@ -27,7 +29,7 @@ const getUsers = async (page) => {
       qty: user.get('qty_in_stock'),
       pages: PAGES
     }
-  }).slice(OFFSET, LIMIT*page);
+  }).slice(OFFSET, OPTIONS.pageSize*page);
 }
 
 exports.getIndex = (req, res) => {

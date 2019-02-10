@@ -1,5 +1,10 @@
-exports.getAirtableRecords = (table, view, limit = 15) => {
-  let records = [];
+exports.getAirtableRecords = (table, options) => {
+  let records = [],
+      params = {
+        view: 'Grid view',
+        pageSize: 15
+      };
+      Object.assign(params, options);
   return new Promise((resolve, reject) => {
     // Cache results if called already
     if (records.length > 0) {
@@ -20,9 +25,6 @@ exports.getAirtableRecords = (table, view, limit = 15) => {
       resolve(records);
     };
 
-    table.select({
-      view,
-      pageSize: limit
-    }).eachPage(processPage, processRecords);
+    table.select(params).eachPage(processPage, processRecords);
   });
 };
