@@ -10,7 +10,7 @@ const base = new Airtable({
  */
 const TABLE = base('users'),
       OPTIONS = {
-        view: 'Grid View',
+        view: 'Grid view',
         pageSize: 24
       }
 
