@@ -1,59 +1,46 @@
-const webpack = require('webpack');
+const path = require("path");
 
-const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const fs = require('fs');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-const devMode = process.env.NODE_ENV !== 'production';
+const devMode = process.env.NODE_ENV !== "production";
 
 // the path(s) that should be cleaned
-let pathsToClean = [
-  'public/dist'
-]
+let pathsToClean = ["public/dist"];
 
 // the clean options to use
 let cleanOptions = {
   root: __dirname,
   verbose: true,
   dry: false,
-  watch: true
-}
+  watch: true,
+};
 
 module.exports = {
-  mode: devMode ? 'development' : 'production',
+  mode: devMode ? "development" : "production",
   entry: {
-    main: [
-      './public/javascripts/main.js',
-      './public/sass/main.scss',
-    ]
+    main: ["./public/javascripts/main.js", "./public/sass/main.scss"],
   },
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'public', 'dist')
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "public", "dist"),
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: "./dist",
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true
+      new TerserPlugin({
+        sourceMap: true,
       }),
-      new OptimizeCSSAssetsPlugin()
-    ]
+      new OptimizeCSSAssetsPlugin(),
+    ],
   },
   module: {
     rules: [
@@ -62,55 +49,50 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader:'css-loader',
+            loader: "css-loader",
             options: {
-              minimize: devMode,
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
-            loader:'sass-loader',
+            loader: "sass-loader",
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['env'],
-            }
-          }
-        ]
+              presets: ["env"],
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-        loader: 'file-loader',
+        loader: "file-loader",
         options: {
-          name: 'public/images/[name].[ext]'
-        }
-      }
-    ]
+          name: "public/images/[name].[ext]",
+        },
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: devMode ? '[name].css' : '[name].[chunkhash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[chunkhash].css',
+      filename: devMode ? "[name].css" : "[name].[chunkhash].css",
+      chunkFilename: devMode ? "[id].css" : "[id].[chunkhash].css",
     }),
 
-    new CleanWebpackPlugin(pathsToClean, cleanOptions)
-  ]
-
+    new CleanWebpackPlugin(pathsToClean, cleanOptions),
+  ],
 };
